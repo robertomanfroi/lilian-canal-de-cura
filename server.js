@@ -6,6 +6,18 @@ const http = require('http');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Remover header que expõe a tecnologia usada
+app.disable('x-powered-by');
+
+// Headers de segurança
+app.use((req, res, next) => {
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  next();
+});
+
 // Servir arquivos estáticos
 app.use(express.static(path.join(__dirname)));
 
